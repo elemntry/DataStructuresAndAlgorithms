@@ -7,8 +7,10 @@ namespace AlgorithmicToolbox
     {
         static void Main()
         {
-            Console.WriteLine(FibonacciLastDigit(Convert.ToInt32(Console.ReadLine())));
+            var values = Console.ReadLine().Split(' ').Select(s => int.Parse(s)).ToArray();
+            Console.WriteLine(LCM(values[0] , values[1]));
         }
+
         // Maximum pairwise product
         static void MPD()
         {
@@ -18,7 +20,9 @@ namespace AlgorithmicToolbox
             var values = Console.ReadLine().Split(' ').Select(s => double.Parse(s)).OrderByDescending(el => el).ToArray();
             Console.WriteLine(values[0] * values[1]);
         }
-        // Fibonacci numbers
+        /*
+        Fibonacci numbers
+        */
         static int FibonacciNaive(int n)
         {
             if (n <= 1) return n;
@@ -30,7 +34,8 @@ namespace AlgorithmicToolbox
             if (n == 0) return 0;
             if (n == 1) return 1;
             if (n == 2) return 1;
-            /*// double[] fibArr = new double[n+1];
+            // implementation with array
+            // double[] fibArr = new double[n+1];
             // fibArr[0] = 0;
             // fibArr[1] = 1;
             // for (int i = 2; i <= n; i++)
@@ -49,7 +54,9 @@ namespace AlgorithmicToolbox
             }
             return b;
         }
-        // Last digit of a large fibonacci number
+        /*
+        Last digit of a large fibonacci number
+        */
         static int FibonacciLastDigit(int n)
         {
             if (n == 0) return 0;
@@ -65,10 +72,34 @@ namespace AlgorithmicToolbox
             }
             return b;
         }
-        // Greatest common divisor
-        private int GCD(int a, int b)
+        /*
+        Greatest common divisor
+        */
+        static int NaiveGCD(int a, int b)
         {
-            return 1;
+            int gcd = 1;
+            int max = Math.Max(a, b);
+            for (int d = 2; d <= max; d++)
+            {
+                if (a % d == 0 && b % d == 0) gcd = d;
+            }
+            return gcd;
+        }
+        static int EuclidGCD(int a, int b)
+        {
+            int gcd = 1;
+            if (a == 0) return b;
+            if (b == 0) return a;
+            if (a >= b) return EuclidGCD(a % b, b);
+            if (b >= a) return EuclidGCD(a, b % a);
+            return gcd;
+        }
+        /*
+        Least Common Multiple 
+        */
+        static double LCM(int a, int b)
+        {
+            return Math.Round((double)a * (double)b / EuclidGCD(a, b));
         }
     }
 }
