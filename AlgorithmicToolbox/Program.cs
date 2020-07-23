@@ -7,8 +7,8 @@ namespace AlgorithmicToolbox
     {
         static void Main()
         {
-            var values = Console.ReadLine().Split(' ').Select(s => int.Parse(s)).ToArray();
-            Console.WriteLine(LCM(values[0] , values[1]));
+           
+            Console.WriteLine(getOptimalValue(50, new int[] { 60, 100, 120 }, new int[] { 20, 50, 30 }));
         }
 
         // Maximum pairwise product
@@ -101,5 +101,50 @@ namespace AlgorithmicToolbox
         {
             return Math.Round((double)a * (double)b / EuclidGCD(a, b));
         }
+        /*
+        Money Change 
+        */
+        static int MoneyChange(int m)
+        {
+            int[] denominationsCoins = new[] { 1, 5, 10 };
+            int NumberOfCoins = 0;
+            int i = denominationsCoins.Length - 1;
+            while(i >= 0)
+            {
+                while(m >= denominationsCoins[i])
+                {
+                    m -= denominationsCoins[i];                    
+                    NumberOfCoins++;
+                }
+                i--;
+            }
+
+            return NumberOfCoins;
+        }
+        /*
+        Maximum Value of the Loot 
+        //WORK IN PROGRESS
+        */
+        static double getOptimalValue(double capacity, int[] values, int[] weights)
+        {
+            double value = 0;
+            double[] derivativeOfValWeights = new double[values.Length];
+            //fill array
+            for (int i = 0; i < values.Length; i++)
+            {
+                derivativeOfValWeights[i] = values[i] / weights[i];
+            }
+            //int i = values.Length - 1;
+            while (capacity > 0)
+            {
+                double max = derivativeOfValWeights.Max();
+                int p = Array.IndexOf(derivativeOfValWeights, max);
+                capacity -= values[p];
+                value += values[p];
+                if (capacity < max) derivativeOfValWeights[p] = 0;
+            }
+            return value;
+        }
+        
     }
 }
