@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace AlgorithmicToolbox
@@ -127,28 +128,20 @@ namespace AlgorithmicToolbox
         //WORK IN PROGRESS
         // DO: sort array bt val/weight before start
         */
-        static double getOptimalValue(double capacity, int[] values, int[] weights)
+        static double getOptimalValue(double capacity, List<int[]> valsWeights)
         {
             double value = 0;
-            double[] divideValByWeight = new double[values.Length];
-            //fill array
-            for (int i = 0; i < values.Length; i++)
-            {
-                divideValByWeight[i] = values[i] / weights[i];
-            }
-            if (values.Length == 1) return capacity > values[0] ? values[0] : Math.Round(capacity / weights[0] * values[0], 4);
+            if (valsWeights.Count == 1) return capacity > valsWeights.ElementAt(0)[0] ? valsWeights.ElementAt(0)[0] : Math.Round(capacity / valsWeights.ElementAt(0)[1] * valsWeights.ElementAt(0)[0], 4);            
             while (capacity > 0)
             {
-                double max = divideValByWeight.Max();
-                int p = Array.IndexOf(divideValByWeight, max);
-                if (capacity < weights[p])
+                if(capacity < valsWeights.Last()[1])
                 {
-                    divideValByWeight[p] = 0;
+                    valsWeights.RemoveAt(valsWeights.Count - 1);
                 }
                 else
                 {
-                capacity -= weights[p];
-                value += values[p];
+                    capacity -= valsWeights.Last()[1];
+                    value += valsWeights.Last()[0];
                 }
             }
             return value;
@@ -156,8 +149,9 @@ namespace AlgorithmicToolbox
         static void InputForGetOptimalValue()
         {
             //Вводим входные параметры, первый эл массива - кол-во возможныйх вещей, второй эл массива - макс вместимость рюкзака.
-            var init = Console.ReadLine().Split(' ').Select(s => int.Parse(s)).ToArray(); 
+            var init = Console.ReadLine().Split(' ').Select(s => int.Parse(s)).ToArray();
             //Create array for values and weights
+            List<int[]> valsWeights = new List<int[]>();
             int[] values = new int[init[0]];
             int[] weights = new int[init[0]];
             var capacity = init[1];
@@ -165,12 +159,26 @@ namespace AlgorithmicToolbox
             for (int i = 0; i < init[0]; i++)
             {
                 var row = Console.ReadLine().Split(' ').Select(s => int.Parse(s)).ToArray();
-                values[i] = row[0];
-                weights[i] = row[1];
+                valsWeights.Add(new[] { row[0], row[1] });
             }
-            Console.WriteLine(getOptimalValue(capacity, values, weights));
+            CompareListItems cmpr = new CompareListItems();
+            valsWeights.Sort(cmpr);            
+            Console.WriteLine(getOptimalValue(capacity, valsWeights));
         }
+        class CompareListItems : IComparer<int[]>
+        {
+            public int Compare(int[] x, int[] y)
+            {
+                if (x[0] == 0 || y[0] == 0)
+                {
+                    return 0;
+                }
 
+                // CompareTo() method 
+                return (x[0]/x[1]).CompareTo(y[0]/y[1]);
 
+            }
+        }
     }
+
 }
