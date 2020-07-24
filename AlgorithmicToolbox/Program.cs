@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AlgorithmicToolbox
@@ -7,8 +8,8 @@ namespace AlgorithmicToolbox
     {
         static void Main()
         {
-           
-            Console.WriteLine(getOptimalValue(50, new int[] { 60, 100, 120 }, new int[] { 20, 50, 30 }));
+
+            InputForGetOptimalValue();
         }
 
         // Maximum pairwise product
@@ -124,27 +125,52 @@ namespace AlgorithmicToolbox
         /*
         Maximum Value of the Loot 
         //WORK IN PROGRESS
+        // DO: sort array bt val/weight before start
         */
         static double getOptimalValue(double capacity, int[] values, int[] weights)
         {
             double value = 0;
-            double[] derivativeOfValWeights = new double[values.Length];
+            double[] divideValByWeight = new double[values.Length];
             //fill array
             for (int i = 0; i < values.Length; i++)
             {
-                derivativeOfValWeights[i] = values[i] / weights[i];
+                divideValByWeight[i] = values[i] / weights[i];
             }
-            //int i = values.Length - 1;
+            if (values.Length == 1) return capacity > values[0] ? values[0] : Math.Round(capacity / weights[0] * values[0], 4);
             while (capacity > 0)
             {
-                double max = derivativeOfValWeights.Max();
-                int p = Array.IndexOf(derivativeOfValWeights, max);
-                capacity -= values[p];
+                double max = divideValByWeight.Max();
+                int p = Array.IndexOf(divideValByWeight, max);
+                if (capacity < weights[p])
+                {
+                    divideValByWeight[p] = 0;
+                }
+                else
+                {
+                capacity -= weights[p];
                 value += values[p];
-                if (capacity < max) derivativeOfValWeights[p] = 0;
+                }
             }
             return value;
         }
-        
+        static void InputForGetOptimalValue()
+        {
+            //Вводим входные параметры, первый эл массива - кол-во возможныйх вещей, второй эл массива - макс вместимость рюкзака.
+            var init = Console.ReadLine().Split(' ').Select(s => int.Parse(s)).ToArray(); 
+            //Create array for values and weights
+            int[] values = new int[init[0]];
+            int[] weights = new int[init[0]];
+            var capacity = init[1];
+            //Заполняем массивы для значений ценности и веса
+            for (int i = 0; i < init[0]; i++)
+            {
+                var row = Console.ReadLine().Split(' ').Select(s => int.Parse(s)).ToArray();
+                values[i] = row[0];
+                weights[i] = row[1];
+            }
+            Console.WriteLine(getOptimalValue(capacity, values, weights));
+        }
+
+
     }
 }
