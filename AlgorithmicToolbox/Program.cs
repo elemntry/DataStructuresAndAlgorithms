@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AlgorithmicToolbox
 {
-    class Program
+    public class Program
     {
         static void Main()
         {
@@ -138,7 +138,7 @@ namespace AlgorithmicToolbox
         /*
         Maximum Value of the Loot
         */
-        static double GetOptimalValue(double capacity, List<int[]> valsWeights)
+        public static double GetOptimalValue(double capacity, List<int[]> valsWeights)
         {
             double value = 0;
             if (valsWeights.Count == 1)
@@ -190,6 +190,47 @@ namespace AlgorithmicToolbox
                 // CompareTo() method 
                 return (x[0] / (double) x[1]).CompareTo(y[0] / (double) y[1]);
             }
+        }
+
+        /*
+        Implement Car Fueling algo
+        */
+        public static int ComputeMinRefills(int dist, int tank, int[] stops)
+        {
+            int numRefills = 0;
+            int currentPosition = 0;
+            while (currentPosition <= stops.Length - 2)
+            {
+                int lastPosition = currentPosition;
+                while (currentPosition <= stops.Length - 2 && stops[currentPosition + 1] - stops[lastPosition] <= tank)
+                {
+                    currentPosition++;
+                }
+
+                if (currentPosition == lastPosition) return -1;
+                if (currentPosition <= stops.Length - 2) numRefills++;
+            }
+
+            return numRefills;
+        }
+
+        public static void InputForComputeMinRefills()
+        {
+            //input values
+            int dist = int.Parse(Console.ReadLine());
+            int tank = int.Parse(Console.ReadLine());
+            int valStops = int.Parse(Console.ReadLine());
+            var tempStops = Console.ReadLine().Split(' ').Select(s => int.Parse(s)).ToArray();
+            var stops = new int[tempStops.Length + 2];
+            for (int i = 1; i < stops.Length - 1; i++)
+            {
+                stops[i] = tempStops[i - 1];
+            }
+
+            stops[stops.Length - 1] = dist;
+            //sort stops arr;
+            //Array.Sort(stops);
+            Console.WriteLine(ComputeMinRefills(dist, tank, stops));
         }
     }
 }
