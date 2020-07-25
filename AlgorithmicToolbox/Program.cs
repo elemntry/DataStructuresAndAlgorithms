@@ -136,9 +136,7 @@ namespace AlgorithmicToolbox
         }
 
         /*
-        Maximum Value of the Loot 
-        //WORK IN PROGRESS
-        // DO: sort array bt val/weight before start
+        Maximum Value of the Loot
         */
         static double GetOptimalValue(double capacity, List<int[]> valsWeights)
         {
@@ -146,8 +144,8 @@ namespace AlgorithmicToolbox
             if (valsWeights.Count == 1)
                 return capacity > valsWeights.ElementAt(0)[0]
                     ? valsWeights.ElementAt(0)[0]
-                    : Math.Round(capacity / valsWeights.ElementAt(0)[1] * valsWeights.ElementAt(0)[0], 4);
-            while (capacity > 0 || valsWeights.Count > 0)
+                    : Math.Round(capacity / (double) valsWeights.ElementAt(0)[1] * valsWeights.ElementAt(0)[0], 4);
+            while (capacity > 0 && valsWeights.Count > 0)
             {
                 if (capacity < valsWeights.Last()[1])
                 {
@@ -189,13 +187,8 @@ namespace AlgorithmicToolbox
         {
             public int Compare(int[] x, int[] y)
             {
-                if (x[0] == 0 || y[0] == 0)
-                {
-                    return 0;
-                }
-
                 // CompareTo() method 
-                return (x[0] / x[1]).CompareTo(y[0] / y[1]);
+                return (x[0] / (double) x[1]).CompareTo(y[0] / (double) y[1]);
             }
         }
     }
