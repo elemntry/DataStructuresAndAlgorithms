@@ -141,22 +141,19 @@ namespace AlgorithmicToolbox
         public static double GetOptimalValue(double capacity, List<int[]> valsWeights)
         {
             double value = 0;
-            if (valsWeights.Count == 1)
-                return capacity > valsWeights.ElementAt(0)[0]
-                    ? valsWeights.ElementAt(0)[0]
-                    : Math.Round(capacity / (double) valsWeights.ElementAt(0)[1] * valsWeights.ElementAt(0)[0], 4);
             while (capacity > 0 && valsWeights.Count > 0)
             {
                 if (capacity < valsWeights.Last()[1])
                 {
-                    valsWeights.RemoveAt(valsWeights.Count - 1);
+                    value += Math.Round(capacity / valsWeights.Last()[1] * valsWeights.Last()[0], 4);
                 }
                 else
                 {
-                    capacity -= valsWeights.Last()[1];
                     value += valsWeights.Last()[0];
-                    valsWeights.RemoveAt(valsWeights.Count - 1);
                 }
+
+                capacity -= valsWeights.Last()[1];
+                valsWeights.RemoveAt(valsWeights.Count - 1);
             }
 
             return value;
@@ -183,7 +180,7 @@ namespace AlgorithmicToolbox
             Console.WriteLine(GetOptimalValue(capacity, valsWeights));
         }
 
-        class CompareListItems : IComparer<int[]>
+        public class CompareListItems : IComparer<int[]>
         {
             public int Compare(int[] x, int[] y)
             {
