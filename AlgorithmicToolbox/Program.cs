@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
 using System.Linq;
 
 namespace AlgorithmicToolbox
@@ -9,7 +10,7 @@ namespace AlgorithmicToolbox
     {
         static void Main()
         {
-            InputForGetOptimalValue();
+            InputBinarySearch();
         }
 
         // Maximum pairwise product
@@ -228,6 +229,38 @@ namespace AlgorithmicToolbox
             //sort stops arr;
             //Array.Sort(stops);
             Console.WriteLine(ComputeMinRefills(dist, tank, stops));
+        }
+
+        /*
+        Binary search 
+        */
+        public static int BinarySearch(int[] arr, int value)
+        {
+            int l = 0;
+            int r = arr.Length - 1;
+            while (l <= r)
+            {
+                int m = l + (r - l) / 2;
+                if (arr[m] == value) return m;
+                if(arr[m] < value)
+                {
+                    l = m + 1;
+                }
+                else
+                {
+                    r = m - 1;
+                }
+            }
+            return -1;
+        }
+        static void InputBinarySearch()
+        {
+            //Create array without first element
+            var arr = Console.ReadLine().Split(' ').ToList().Select(s => int.Parse(s)).Where((x, idx) => idx > 0).ToArray();            
+            var valuesForSearch = Console.ReadLine().Split(' ').Select(str => int.Parse(str)).Where((x, idx) => idx > 0);
+            //Print solution
+            var result = valuesForSearch.Select(el => BinarySearch(arr, el));
+            Console.WriteLine(string.Join(" ", result));
         }
     }
 }
