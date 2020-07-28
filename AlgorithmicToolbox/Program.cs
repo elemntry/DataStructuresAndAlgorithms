@@ -262,5 +262,64 @@ namespace AlgorithmicToolbox
             var result = valuesForSearch.Select(el => BinarySearch(arr, el));
             Console.WriteLine(string.Join(" ", result));
         }
+
+        /*
+        Majority Element 
+        */
+        public static int MajorityElement(int[] arr)
+        {
+            QuickSort(arr, 0, arr.Length - 1);            
+            //wip
+            return 0;
+        }
+        public static void QuickSort(int[] arr, int l, int r)
+        {
+
+            if (l < r)
+            {
+
+                /* pi is partitioning index, arr[pi] is  
+                now at right place */
+                int pi = Partition(arr, l, r);
+
+                // Recursively sort elements before 
+                // partition and after partition 
+                QuickSort(arr, l, pi - 1);
+                QuickSort(arr, pi + 1, r);
+            }
+        }
+        static int Partition(int[] arr, int l, int r)
+        {
+            int pivot = arr[r];
+
+            // index of smaller element 
+            int i = (l - 1);
+            for (int j = l; j < r; j++)
+            {
+                // If current element is smaller  
+                // than the pivot 
+                if (arr[j] < pivot)
+                {
+                    i++;
+
+                    // swap arr[i] and arr[j] 
+                    int temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+
+            // swap arr[i+1] and arr[r] (or pivot) 
+            int temp1 = arr[i + 1];
+            arr[i + 1] = arr[r];
+            arr[r] = temp1;
+
+            return i + 1;
+        }
+        static void InputMajorityElement()
+        {
+
+        }
+
     }
 }
