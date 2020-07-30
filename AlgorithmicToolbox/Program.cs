@@ -10,7 +10,7 @@ namespace AlgorithmicToolbox
     {
         static void Main()
         {
-            InputBinarySearch();
+            InputMajorityElement();
         }
 
         // Maximum pairwise product
@@ -264,61 +264,141 @@ namespace AlgorithmicToolbox
         }
 
         /*
-        Majority Element 
+        Majority Element ver.1
         */
-        public static int MajorityElement(int[] arr)
+        public static int MajorityElementVer1(int[] arr)
         {
-            QuickSort(arr, 0, arr.Length - 1);            
-            //wip
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+            int majority = arr.Length / 2;
+
+            //Stores the number of occcurences of each item in the passed array in a dictionary
+            foreach (int i in arr)
+            {
+                if (dict.ContainsKey(i))
+                {
+                    dict[i]++;
+                    //Checks if element just added is the majority element
+                    if (dict[i] > majority)
+                        return 1;
+                }
+                else dict.Add(i, 1);
+            }
             return 0;
         }
-        public static void QuickSort(int[] arr, int l, int r)
+        /*
+       Majority Element ver.2
+       */
+        //Quick sort and n
+        //public static int MajorityElementVer2(int[] arr)
+        //{
+        //    QuickSort(arr, 0, arr.Length - 1);
+        //    int count = 1;
+        //    int temp = arr[0];
+        //    int m = arr.Length / 2;
+        //    for (int i = 1; i < arr.Length; i++)
+        //    {
+        //        if(temp == arr[i])
+        //        {
+        //            count++;
+        //        }
+        //        else 
+        //        {
+        //            count = 1;
+        //            temp = arr[i];
+        //        }
+        //        if (count > m)
+        //        {
+        //            return 1;
+        //        }
+        //    }
+        //    return 0;
+        //}
+        //public static void QuickSort(int[] arr, int l, int r)
+        //{
+
+        //    if (l < r)
+        //    {
+
+        //        /* pi is partitioning index, arr[pi] is  
+        //        now at right place */
+        //        int pi = Partition(arr, l, r);
+
+        //        // Recursively sort elements before 
+        //        // partition and after partition 
+        //        QuickSort(arr, l, pi - 1);
+        //        QuickSort(arr, pi + 1, r);
+        //    }
+        //}
+        //static int Partition(int[] arr, int l, int r)
+        //{
+        //    int pivot = arr[r];
+
+        //    // index of smaller element 
+        //    int i = (l - 1);
+        //    for (int j = l; j < r; j++)
+        //    {
+        //        // If current element is smaller  
+        //        // than the pivot 
+        //        if (arr[j] < pivot)
+        //        {
+        //            i++;
+
+        //            // swap arr[i] and arr[j] 
+        //            int temp = arr[i];
+        //            arr[i] = arr[j];
+        //            arr[j] = temp;
+        //        }
+        //    }
+
+        //    // swap arr[i+1] and arr[r] (or pivot) 
+        //    int temp1 = arr[i + 1];
+        //    arr[i + 1] = arr[r];
+        //    arr[r] = temp1;
+
+        //    return i + 1;
+        //}
+
+        /*
+        Majority Element ver.3
+        unfinished
+        */
+        public static int MajorityElementVariant3(int[] arr)
         {
-
-            if (l < r)
-            {
-
-                /* pi is partitioning index, arr[pi] is  
-                now at right place */
-                int pi = Partition(arr, l, r);
-
-                // Recursively sort elements before 
-                // partition and after partition 
-                QuickSort(arr, l, pi - 1);
-                QuickSort(arr, pi + 1, r);
-            }
+            return MajorityElementVariant3Rec(arr, 0, arr.Length - 1);
         }
-        static int Partition(int[] arr, int l, int r)
+        static int MajorityElementVariant3Rec(int[] arr, int lo, int hi)
         {
-            int pivot = arr[r];
+            if (lo == hi) return arr[lo];
+            int mid = (hi - lo) / 2 + lo;
+            int left = MajorityElementVariant3Rec(arr, lo, mid);
+            int right = MajorityElementVariant3Rec(arr, mid + 1, hi);
 
-            // index of smaller element 
-            int i = (l - 1);
-            for (int j = l; j < r; j++)
+            if (left == right)
             {
-                // If current element is smaller  
-                // than the pivot 
-                if (arr[j] < pivot)
-                {
-                    i++;
+                return left;
+            }
+            int leftCount = CountInRange(arr, left, lo, hi);
+            int rightCount = CountInRange(arr, right, lo, hi);
 
-                    // swap arr[i] and arr[j] 
-                    int temp = arr[i];
-                    arr[i] = arr[j];
-                    arr[j] = temp;
+            return leftCount > rightCount ? left : right;
+        }
+        static int CountInRange(int[] arr, int num, int lo, int hi)
+        {
+            int count = 0;
+            for (int i = lo; i <= hi; i++)
+            {
+                if (arr[i] == num)
+                {
+                    count++;
                 }
             }
-
-            // swap arr[i+1] and arr[r] (or pivot) 
-            int temp1 = arr[i + 1];
-            arr[i + 1] = arr[r];
-            arr[r] = temp1;
-
-            return i + 1;
+            return count;
         }
         static void InputMajorityElement()
         {
-
+            int arrLength = int.Parse(Console.ReadLine());
+            var arr = Console.ReadLine().Split(' ').Select(s => int.Parse(s)).ToArray();
+            Console.WriteLine(MajorityElementVer1(arr));
         }
 
     }
