@@ -10,7 +10,7 @@ namespace AlgorithmicToolbox
     {
         static void Main()
         {
-            InputMajorityElement();
+            InputDynamicProgrammingMoneyChangeAgain();
         }
 
         // Maximum pairwise product
@@ -411,6 +411,94 @@ namespace AlgorithmicToolbox
             }
 
             return count;
+        }
+        /*
+        Money Change Again ver.1
+        greedy algo
+        */
+        static void InputGreedyMoneyChangeAgain()
+        {
+            int n = int.Parse(Console.ReadLine());
+            int[] coins = { 1, 3, 4 };
+            List<int> result = GreedyMoneyChangeAgain(n, coins);
+            result.ForEach(x => Console.Write($"{x} "));
+            Console.WriteLine();
+            Console.WriteLine(result.Count);
+        }
+        public static List<int> GreedyMoneyChangeAgain(int n, int[] coins)
+        {
+            
+            List<int> change = new List<int>();
+            while (n > 0) {
+                int coin = 0;
+                for(int i = coins.Length - 1; i >= 0; i--)
+                {
+                    if (n >= coins[i]) 
+                    {
+                        coin = coins[i];
+                        break;
+                    }
+                }
+                change.Add(coin);
+                n -= coin;
+            }
+            return change;
+        }
+        /*
+        Money Change Again ver.2
+        recursive algo
+        */
+        static void InputRecursiveMoneyChangeAgain()
+        {
+            int n = int.Parse(Console.ReadLine());
+            int[] coins = { 1, 3, 4 };                        
+            Console.WriteLine(RecursiveMoneyChangeAgain(n, coins));
+            
+        }
+        public static int RecursiveMoneyChangeAgain(int n, int[] coins)
+        {
+            if (n == 0) return 0;
+            int minNumCoins = int.MaxValue;
+            for (int i = 0; i < coins.Length; i++)
+            {
+                if (n >= coins[i])
+                {
+                    int numCoins = RecursiveMoneyChangeAgain(n - coins[i], coins);
+                    if (numCoins + 1 < minNumCoins)
+                    {
+                        minNumCoins = numCoins + 1;
+                    }
+                }
+            }
+            return minNumCoins;
+        }
+        /*
+        Money Change Again ver.3
+        dynamic algo
+        */
+        static void InputDynamicProgrammingMoneyChangeAgain()
+        {
+            int n = int.Parse(Console.ReadLine());
+            int[] coins = { 1, 3, 4 };
+            Console.WriteLine(DynamicProgrammingMoneyChangeAgain(n, coins));
+        }
+
+        public static int DynamicProgrammingMoneyChangeAgain(int n, int[] coins)
+        {
+            int[] minNumCoins = new int[n+1];
+            for (int m = 1; m <= n; m++)
+            {
+                minNumCoins[m] = int.MaxValue;
+                for (int i = 0; i < coins.Length; i++)
+                {
+                    if (m >= coins[i])
+                    {
+                        int numCoins = minNumCoins[m - coins[i]] + 1;
+                        if (numCoins < minNumCoins[m]) minNumCoins[m] = numCoins;
+                    }
+                }
+            }
+            return minNumCoins[n];
         }
     }
 }
