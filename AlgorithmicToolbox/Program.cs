@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace AlgorithmicToolbox
 {
@@ -10,7 +11,7 @@ namespace AlgorithmicToolbox
     {
         static void Main()
         {
-            InputDynamicProgrammingMoneyChangeAgain();
+            InputDPPrimitiveCalculator();
         }
 
         // Maximum pairwise product
@@ -499,6 +500,107 @@ namespace AlgorithmicToolbox
                 }
             }
             return minNumCoins[n];
+        }
+
+        /*
+        Primitive calculator ver.1
+        dynamic algo
+        */
+        //static void InputDPPrimitiveCalculator()
+        //{
+        //    int n = int.Parse(Console.ReadLine());
+        //    DPPrimitiveCalculator(n);
+        //}
+        //public static void DPPrimitiveCalculator(int n)
+        //{
+        //    int[] ops = new int[n + 1];
+        //    ops[1] = 0;
+
+        //    int min;
+        //    for (int i = 2; i < n+1; i++)
+        //    {
+        //        min = ops[i - 1] + 1;
+        //        if (i % 2 == 0) min = Math.Min(min, ops[i / 2] + 1);
+        //        if (i % 3 == 0) min = Math.Min(min, ops[i / 3] + 1);
+        //        ops[i] = min;
+        //    }
+
+        //    List<int> result = new List<int>();
+        //    { 
+        //    int i = n;
+        //    while (i > 1)
+        //    {
+        //        if (ops[i] == ops[i - 1] + 1)
+        //        {
+        //            result.Add(1);
+        //            i--;
+        //            continue;
+        //        }
+        //        if (i%2 ==0 && ops[i] == ops[i/2] + 1)
+        //        {
+        //            result.Add(2);
+        //            continue;
+        //        }
+
+        //        result.Add(3);
+        //        i = i / 3;
+        //    }
+        //    }
+        //    Console.WriteLine(ops[n]);
+        //    result.ForEach(el => Console.Write(el));
+        //}
+
+        static void InputGreedyPrimitiveCalculator()
+        {
+            int n = int.Parse(Console.ReadLine());
+            GreedyPrimitiveCalculator(n);
+        }
+        public static int GreedyPrimitiveCalculator(int n)
+        {
+            List<int> result = new List<int>();
+            while(n >= 1)
+            {
+
+                if (n % 3 == 0)
+                {
+                    n = n / 3;
+                }
+                else if (n % 2 == 0) 
+                { 
+                    n = n / 2; 
+                }
+                else n = n - 1;
+                result.Add(n);
+            }
+            return result.Count - 1;
+        }
+        //don't work
+
+        static void InputDPPrimitiveCalculator()
+        {
+            int n = int.Parse(Console.ReadLine());
+            DPPrimitiveCalculator(n);
+        }
+        public static int DPPrimitiveCalculator(int n)
+        {
+            List<int> result = new List<int>();
+            int[] arr = new int[n + 1];
+            for (int i = 1; i < arr.Length; i++)
+            {
+                arr[i] = arr[i - 1] + 1;
+                if (i % 2 == 0) arr[i] = Math.Min(1 + arr[i / 2], arr[i]);
+                if (i % 3 == 0) arr[i] = Math.Min(1 + arr[i / 3], arr[i]);
+            }
+            for (int i = n; i > 1; )
+            {
+                result.Add(i);
+                if (arr[i - 1] == arr[i] - 1) i = i - 1;
+                else if (i % 2 == 0 && (arr[i / 2] == arr[i] - 1)) i = i / 2;
+                else if (i % 3 == 0 && (arr[i / 3] == arr[i] - 1)) i = i / 3;
+
+            }
+            result.Add(1);
+            return result.Count;
         }
     }
 }

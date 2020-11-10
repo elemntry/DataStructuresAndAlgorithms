@@ -22,7 +22,7 @@ namespace Tests
             int n = 34;
             int[] coins = { 1, 3, 4 };
             int result = Program.GreedyMoneyChangeAgain(n, coins).Count;
-            Assert.Equal("10", result.ToString());
+            Assert.Equal("9", result.ToString()); // not be equal, because algo isn't optimal
         }
         [Fact]
         public void TestsRecursiveMoneyChangeAgain1()
